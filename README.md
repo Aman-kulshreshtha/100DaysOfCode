@@ -9,3 +9,11 @@
 
 **Link to work:** : All code files in this repository 
 
+### Day 1: March 13, 2021 
+
+
+**Today's Progress**: Revised PHP , Web development and started working on the notes taking web app using PHP
+**Thoughts:** : Very happy with my todays progress..
+
+**Link to work:** : All code files in this repository 
+
