@@ -49,7 +49,7 @@
                         </div>
                     </div>
                     <div class="modal-footer d-block mr-auto">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="editModal">Close</button>
                         <button type="submit" class="btn btn-primary">Save changes</button>
                     </div>
                 </form>
@@ -83,8 +83,39 @@
     </nav>
 
     <?php
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
+    if(isset($_GET['delete'])){
+       $sno = $_GET['delete'];
+        $servername = "localhost:3307";
+        $username = "root";
+        $password = "";
+        $database = "notesdb";
+
+        $conn = mysqli_connect($servername, $username, $password, $database);
+
+        if (!$conn) {
+            echo "connection unsuccessful";
+        }
+
+        $query = 'DELETE FROM `notes` WHERE `SNo` ='.$sno.';';
+
+        $result = mysqli_query($conn, $query);
+
+        if ($result) {
+            echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+    <strong>Note Deleted
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>';
+        } else {
+            echo '<div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <strong>Something went wrong unable to Delete note
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>';
+        }
+
+
+    }
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $servername = "localhost:3307";
         $username = "root";
         $password = "";
@@ -97,19 +128,39 @@
         }
         $title = $_POST['title'];
         $note = $_POST['note'];
-        $query = 'INSERT INTO `notes` ( `title`, `description`, `tstamp`) VALUES ( "' . $title . '", "' . $note . '",current_timestamp());';
-        $result = mysqli_query($conn, $query);
 
-        if ($result) {
-            echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+
+        if (isset($_POST['snoEdit'])) {
+            $query = 'UPDATE `notes` SET `title`="' . $title . '",`description`="' . $note . '" WHERE `SNo` =' . $_POST['snoEdit'] . ' ;';
+
+            $result = mysqli_query($conn, $query);
+
+            if ($result) {
+                echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+    <strong>Note Updated
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>';
+            } else {
+                echo '<div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <strong>Something went wrong unable to update note
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>';
+            }
+        } else {
+            $query = 'INSERT INTO `notes` ( `title`, `description`, `tstamp`) VALUES ( "' . $title . '", "' . $note . '",current_timestamp());';
+            $result = mysqli_query($conn, $query);
+
+            if ($result) {
+                echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
     <strong>Note Entered
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>';
-        } else {
-            echo '<div class="alert alert-warning alert-dismissible fade show" role="alert">
+            } else {
+                echo '<div class="alert alert-warning alert-dismissible fade show" role="alert">
     <strong>Something went wrong unable to take note
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>';
+            }
         }
     }
 
@@ -140,7 +191,7 @@
                         <th scope="col">Title</th>
                         <th scope="col">Description</th>
                         <th scope="col">Action</th>
-                        <th scope="col">Time Stamp</th>
+                        
                     </tr>
                 </thead>
                 <tbody>
@@ -170,9 +221,9 @@
                             <th scope="row">' . $counter . ' </th>
                             <td>' . $row["title"] . ' </td>
                             <td>' . $row["description"] . ' </td>
-                            <td><button class = "btn edit btn-success" ><i class="fas fa-edit"></i> Edit</button> 
-                            <button class = "btn edit btn-danger"><i class="fas fa-trash-alt"></i> Delete</button></td>
-                            <td>' . $row["tstamp"] . ' </td>
+                            <td><button class = "btn edit btn-success" id = "' . $row["SNo"] . '" ><i class="fas fa-edit"></i> Edit</button> 
+                            <button class = "btn delete btn-danger" id = "d' . $row["SNo"].'"><i class="fas fa-trash-alt"></i> Delete</button></td>
+                           
                         </tr>';
                         $counter = $counter + 1;
                     }
@@ -213,6 +264,19 @@
                     snoEdit.value = e.target.id;
                     console.log(e.target.id)
                     $('#editModal').modal('toggle');
+                })
+            })
+
+            document.querySelectorAll('.delete').forEach(item => {
+                item.addEventListener("click", (e) => {
+                    console.log("delete ");
+                    sno = e.target.id.substr(1,);
+                    console.log(sno);
+
+                    if(confirm("Do you really want to delete this note ?")){
+                        window.location = `index.php?delete=${sno}`;
+                    }
+                   
                 })
             })
         </script>
