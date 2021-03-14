@@ -17,3 +17,12 @@
 
 **Link to work:** : All code files in this repository 
 
+### Day 2: March 14, 2021 
+
+
+**Today's Progress**: Completed the notes taking app, revised DBMS 
+**Thoughts:** : Tired . . .
+
+**Link to work:** : All code files in this repository 
+
+
