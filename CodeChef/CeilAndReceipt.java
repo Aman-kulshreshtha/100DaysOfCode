@@ -1,10 +1,11 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Scanner;
-import java.util.StringTokenizer;
+import java.util.*;
+import java.io.*;
+import java.lang.*;
+import java.math.BigInteger;
 
-public class MaxAndMex {
+
+public class CeilAndReceipt {
+
     static class FastReader {
         BufferedReader br;
         StringTokenizer st;
@@ -48,37 +49,15 @@ public class MaxAndMex {
     }
 
     public static void main(String[] args) {
-        FastReader sc = new FastReader();
-        StringBuilder output = new StringBuilder();
-        int t = sc.nextInt();
-        while(t-- > 0) {
-            int count2 = 0, count1 = 0,total = 0;
-           
-            int  n = sc.nextInt();
-            for(int i = 0 ; i < n ;i++) {
-                int x = sc.nextInt();
-                if (x == 2) {
-                    count2++;
-                } else {
-                    count1++;
-                }
-                total += x;
-
-            }
-
-            if(total%2 == 0) {
-                if(count1 == 0 && count2 %2 == 1) {
-                    output.append("NO\n");
-                } else {
-                    output.append("YES\n");
-                }
-            }else {
-                output.append("NO\n");
-            }
+      	Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        var fact = new BigInteger("1");
+        for(int i = 1 ; i <= n ; i++) {
+            fact = fact.multiply(BigInteger.valueOf(i));
 
         }
-
-        System.out.print(output.toString());
-        System.exit(0);        
+        System.out.println(fact);
+        sc.close();
+        System.exit(0);
     }
 }
